@@ -1,0 +1,129 @@
+<html ng-app="weatherFocast" ng-cloak ng-keypress="myenterKey($event)">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Weather Focast</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <link rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css">
+    <link rel="stylesheet" href="bower_components/angular-material-icons/angular-material-icons.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+</head>
+
+<body ng-controller="myCtrl">
+    <!-- Create toolbar -->
+    <md-toolbar>
+        <div class="md-toolbar-tools header-container">
+            <h2 style="padding-bottom: 5px; margin-left: 30px" flex="65">Weather Forecast</h2>
+                <md-input-container flex="30">
+                    <md-autocomplete ng-disabled="isDisabled" md-no-cache="noCache" md-selected-item="selectedItem" md-search-text="searchText"
+                        md-search-text-change="querySearch(searchText)" md-min-length="0" md-items="item in querySearch(searchText)"
+                        md-item-text="item.fullName" placeholder="City">
+                        <md-item-template>
+                            <span md-highlight-text="searchText" md-highlight-flags="^i">{{item.fullName}}</span>
+                        </md-item-template>
+                    </md-autocomplete>
+                </md-input-container>
+
+                <md-button ng-click="resultClick()" class="md-icon-button" aria-label="Favorite"  my-enter="resultClick()">
+                    <ng-md-icon class="favorite-icon" icon="search"></ng-md-icon>
+                </md-button>
+        </div>
+    </md-toolbar>
+
+    <!-- Show details -->
+    <div ng-show="showDetails">
+        <div layout="row">
+            <h2 style="margin-left: 70px">{{city.country}},</h2>
+            <h2 style="margin-left: 20px">{{city.name}}</h2>
+
+        </div>
+        <div style="margin-left: 70px;font-size: 18px;">{{dayDetails.date}}</div>
+        <div layout="row" layout-align="start center">
+            <div class="size" style="margin-left: 71px">{{dayDetails.weather[0].main}},</div>
+            <div class="size" style="margin-left: 20px">{{dayDetails.weather[0].description}}</div>
+
+        </div>
+        <div layout="row" class="padding" style="margin-left: 20px">
+            <div flex="30">
+                <img style="margin-left: 10px" class="picture" src="images/{{dayDetails.weather[0].icon}}.png" alt="img description">
+                <span class="md-display-2" style="margin-left: 10px">{{(dayDetails.main.temp)-(273.5) | number: 1}} °C</span>
+                <div layout="row" layout-align="space-around start">
+                    <div class="padding" style="font-size: 18px">
+                        <img style="height: 30px; width: 30px;" src="images/up_arrow.png" alt=""> {{(dayDetails.main.temp_max)-(273.5) | number: 1}} °C
+                    </div>
+                    <div class="padding" style="font-size: 18px">
+                        <img style="height: 30px; width: 30px;" src="images/down_arrow.png" alt=""> {{(dayDetails.main.temp_min)-(273.5) | number: 1}} °C
+                    </div>
+                </div>
+            </div>
+            <div flex="30"></div>
+            <div flex="50">
+                <div layout="column" layout-align="start start">
+                    <div style="margin-top: 30px;font-size: 20px;padding-left: 10px;">Wind speed: {{dayDetails.wind.speed}} m/s</div>
+                    <div style="font-size: 20px;padding-left: 10px;">Humidity: {{dayDetails.main.humidity}} %</div>
+                    <div style="font-size: 20px;padding-left: 10px;">Cloudiness: {{dayDetails.clouds.all}} %</div>
+                    <section layout="row" layout-align="center center">
+                        <md-button ng-click="tempChart()" class="md-raised md-accent md-hue-3">Tempareture</md-button>
+                        <md-button ng-click="humidChart()" class="md-raised md-accent md-hue-3">Humidity</md-button>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <canvas class="graph" id="myChart"></canvas>
+        </div>
+
+        <!-- Create md-card show information -->
+        <div flex>
+            <div flex="20" ng-init="convertDateTime(day[0])" ng-repeat="day in dayGroup" style="float:left" class="weather-card">
+                <div class="Column">
+                    <div flex-xs flex-gt-xs="100" layout="column">
+                        <md-card class="mdcard" ng-click="FuncShow(day, day[0]);">
+                            <md-card-title>
+                                <md-card-title-text>
+                                    <span>{{day[0].date}}</span>
+                                    <span class="md-headline">{{(day[0].main.temp)-(273.5) | number: 1}} °C</span>
+
+                                </md-card-title-text>
+
+                                <md-card-title-media>
+                                    <div class="md-media-sm card-media">
+                                        <img src="images/{{day[0].weather[0].icon}}.png" alt="img description">
+                                    </div>
+                                </md-card-title-media>
+                            </md-card-title>
+                            <md-card-content>
+                                <div style="font-weight: bold" layout="row" layout-align="center center">{{day[0].weather[0].main}}</div>
+                            </md-card-content>
+                        </md-card>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/angular-aria/angular-aria.min.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.min.js"></script>
+    <script src="bower_components/angular-messages/angular-messages.min.js"></script>
+    <script src="bower_components/angular-material/angular-material.min.js"></script>
+    <script src="bower_components/angular-material-icons/angular-material-icons.min.js"></script>
+    <script src="bower_components/chart.js/dist/Chart.min.js"></script>
+    <script src="bower_components/angular-chart.js/dist/angular-chart.min.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="main.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,26 @@
+{
+  "name": "Weather_Focast",
+  "authors": [
+    "no name"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.3.1",
+    "bootstrap": "^4.1.2",
+    "angular": "^1.7.2",
+    "angular-material": "^1.1.10",
+    "jquery-ui": "^1.12.1",
+    "angular-material-icons": "^0.7.1",
+    "angucomplete-alt": "^3.0.0"
+  }
+}

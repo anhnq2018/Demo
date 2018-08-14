@@ -1,0 +1,38 @@
+.searchPanel {
+    padding-top: 25px;
+}
+
+.header-container {
+    background: deepskyblue;
+}
+.smalltext{
+    font-size: 13px;
+    padding: 10px;
+}
+
+.padding{
+    padding: 10px;
+}
+
+.weather-card{
+    width: 400px;
+}
+
+.picture{
+    width: 150px;
+}
+
+.graph {
+    height: 40% !important;
+}
+
+.size {
+    font-size: 20px;
+    color: rgb(228, 77, 31);
+    font-weight: bold;
+}
+
+.md-accent {
+    background-color: rgb(228, 77, 31) !important;
+}
+
